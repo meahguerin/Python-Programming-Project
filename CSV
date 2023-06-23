@@ -1,0 +1,26 @@
+import csv
+
+def calculate_averages(csv_file):
+    with open(csv_file, 'r') as file:
+        reader = csv.DictReader(file)
+        headers = reader.fieldnames
+        numeric_columns = [header for header in headers if header != 'name']
+        column_sums = {column: 0 for column in numeric_columns}
+        column_counts = {column: 0 for column in numeric_columns}
+
+        for row in reader:
+            for column in numeric_columns:
+                if row[column]:
+                    column_sums[column] += float(row[column])
+                    column_counts[column] += 1
+
+    averages = {column: column_sums[column] / column_counts[column] for column in numeric_columns}
+    return averages
+
+def display_averages(averages):
+    for column, average in averages.items():
+        print(f"Average {column}: {average}")
+
+csv_file = 'data.csv'
+averages = calculate_averages(csv_file)
+display_averages(averages)
